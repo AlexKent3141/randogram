@@ -1,4 +1,3 @@
-
 find_package(SDL2 REQUIRED)
 
 include_directories(
@@ -6,6 +5,7 @@ include_directories(
 
 add_executable(
   randogram
+    prng.c
     randogram.c
     main.c)
 

@@ -1,35 +1,36 @@
 #include "randogram.h"
 #include "time.h"
 #include "stdint.h"
+#include "stdio.h"
 
-// QBasic 24-bit PRNG
-uint32_t rnd24(uint32_t* s)
+void get_randogram(
+  struct prng_info prng_info,
+  float* intensities,
+  int width,
+  int height)
 {
-    *s = (*s*0xfd43fd + 0xc39ec3) & 0xffffff;
-    return *s;
-}
+  const uint32_t prng_max =
+    ~(uint32_t)0 >> (8*sizeof(uint32_t) - prng_info.state_size);
 
-void get_randogram(float* intensities, int width, int height)
-{
-  uint32_t state = time(NULL) & 0xffffff;
+  uint32_t state = time(NULL) & prng_max;
 
-  // We are dealing with a 24 bit PRNG at the moment, so overall we have
-  // 12 bits to plot on each axis.
-  // The width and height probably aren't sufficient so just plot the upper-left
-  // rectangle.
+  // We probably don't have enough pixels to plot the whole state space so
+  // just do the "upper-left" part.
   for (int i = 0; i < width*height; i++)
   {
     intensities[i] = 1.0f;
   }
 
   // Execute the PRNG for half of its state.
+  int half_state = prng_info.state_size / 2;
+  const int prng_half = prng_max >> half_state;
   uint32_t next, upper, lower;
-  for (uint32_t i = 0; i < (1 << 23); i++)
+  for (uint32_t i = 0; i < (1 << prng_info.state_size - 1); i++)
   {
-    next = rnd24(&state);
+    next = (*prng_info.func)(&state);
     
-    lower = next & 0xfff;
-    upper = (next >> 12) & 0xfff;
+    lower = next & prng_half;
+    upper = (next >> half_state) & prng_half;
     if (lower < height && upper < width)
     {
       intensities[lower*width + upper] = 0;

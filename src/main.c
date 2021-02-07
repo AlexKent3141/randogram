@@ -1,4 +1,5 @@
 #include "SDL2/SDL.h"
+#include "prng.h"
 #include "randogram.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -51,7 +52,7 @@ int main()
 
   // Calculate the randogram that we want to plot.
   float* data = (float*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));
-  get_randogram(data, WINDOW_WIDTH, WINDOW_HEIGHT);
+  get_randogram(qbasic, data, WINDOW_WIDTH, WINDOW_HEIGHT);
 
   // Set the pixels on the texture.
   uint32_t* pixels = (uint32_t*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));
