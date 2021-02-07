@@ -16,4 +16,7 @@ struct prng_info
 // QBasic's 24 bit prng.
 extern struct prng_info qbasic;
 
+// Modified QBasic 24 bit prng which preserves the 8 highest bits.
+extern struct prng_info qbasic_high;
+
 #endif // __PRNG_H__
