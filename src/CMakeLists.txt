@@ -11,4 +11,5 @@ add_executable(
 
 target_link_libraries(
   randogram
+    m
     ${SDL2_LIBRARIES})
