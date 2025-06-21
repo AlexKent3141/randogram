@@ -5,35 +5,23 @@
 
 void get_randogram(
   struct prng_info prng_info,
-  float* intensities,
-  int width,
-  int height)
+  int* selected,
+  int num_bits)
 {
   const uint32_t prng_max =
     ~(uint32_t)0 >> (8*sizeof(uint32_t) - prng_info.state_size);
 
   uint32_t state = time(NULL) & prng_max;
 
-  // We probably don't have enough pixels to plot the whole state space so
-  // just do the "upper-left" part.
-  for (int i = 0; i < width*height; i++)
-  {
-    intensities[i] = 1.0f;
-  }
-
-  // Execute the PRNG for half of its state.
-  int half_state = prng_info.state_size / 2;
-  const int prng_half = prng_max >> half_state;
+  // Plot the lowest `num_bits` against the next lowest `num_bits`.
   uint32_t next, upper, lower;
-  for (uint32_t i = 0; i < (1 << prng_info.state_size - 1); i++)
+  const uint32_t word = (1 << num_bits) - 1;
+  for (uint32_t i = 0; i < (word * word) >> 2; i++)
   {
     next = (*prng_info.func)(&state);
     
-    lower = next & prng_half;
-    upper = (next >> half_state) & prng_half;
-    if (lower < height && upper < width)
-    {
-      intensities[lower*width + upper] = 0;
-    }
+    lower = next & word;
+    upper = (next >> num_bits) & word;
+    selected[lower*word + upper] = 1;
   }
 }

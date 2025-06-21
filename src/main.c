@@ -4,8 +4,9 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define NUM_BITS 8
+#define WINDOW_WIDTH (1 << NUM_BITS)
+#define WINDOW_HEIGHT (1 << NUM_BITS)
 
 int main()
 {
@@ -51,8 +52,9 @@ int main()
   }
 
   // Calculate the randogram that we want to plot.
-  float* data = (float*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));
-  get_randogram(qbasic, data, WINDOW_WIDTH, WINDOW_HEIGHT);
+  int* data = (int*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
+  memset(data, 0, WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
+  get_randogram(qbasic, data, NUM_BITS);
 
   // Set the pixels on the texture.
   uint32_t* pixels = (uint32_t*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));

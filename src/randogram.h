@@ -5,8 +5,7 @@
 
 void get_randogram(
   struct prng_info prng_info,
-  float* intensities,
-  int width,
-  int height);
+  int* selected,
+  int num_bits);
 
 #endif // __RANDOGRAM_H__
