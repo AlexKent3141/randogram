@@ -1,6 +1,7 @@
 #include "SDL2/SDL.h"
 #include "prng.h"
 #include "randogram.h"
+#include "assert.h"
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -8,8 +9,22 @@
 #define WINDOW_WIDTH (1 << NUM_BITS)
 #define WINDOW_HEIGHT (1 << NUM_BITS)
 
-int main()
+int main(int argc, char** argv)
 {
+  // Parse args:
+  // * First arg must be the PRNG
+  //   - `qb` -> `qbasic`
+  //   - `qbh` -> `qbasic_high`
+  //   - `xs32` -> `xorshift32`
+  //   - `msq16` -> `middle_square16`
+  struct prng_info* func;
+  assert(argc > 1);
+  if (strcmp(argv[1], "qb") == 0) func = &qbasic;
+  else if (strcmp(argv[1], "qbh") == 0) func = &qbasic_high;
+  else if (strcmp(argv[1], "xs32") == 0) func = &xorshift32;
+  else if (strcmp(argv[1], "msq16") == 0) func = &middle_square16;
+  else assert(0);
+
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
     printf("SDL_Init error: %s\n", SDL_GetError());
@@ -54,7 +69,7 @@ int main()
   // Calculate the randogram that we want to plot.
   int* data = (int*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
   memset(data, 0, WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
-  get_randogram(qbasic, data, NUM_BITS);
+  get_randogram(*func, data, NUM_BITS);
 
   // Set the pixels on the texture.
   uint32_t* pixels = (uint32_t*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));
