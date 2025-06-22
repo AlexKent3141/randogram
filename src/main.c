@@ -2,6 +2,7 @@
 #include "prng.h"
 #include "randogram.h"
 #include "assert.h"
+#include "time.h"
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -24,6 +25,14 @@ int main(int argc, char** argv)
   else if (strcmp(argv[1], "xs32") == 0) func = &xorshift32;
   else if (strcmp(argv[1], "msq16") == 0) func = &middle_square16;
   else assert(0);
+
+  // Pick the seed (can be overridden via the second argument).
+  const uint32_t prng_max = ~(uint32_t)0 >> (32 - func->state_size);
+  uint32_t seed = time(NULL) & prng_max;
+
+  if (argc > 2) {
+    seed = atoi(argv[2]);
+  }
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
@@ -69,7 +78,7 @@ int main(int argc, char** argv)
   // Calculate the randogram that we want to plot.
   int* data = (int*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
   memset(data, 0, WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
-  get_randogram(*func, data, NUM_BITS);
+  get_randogram(*func, data, NUM_BITS, seed);
 
   // Set the pixels on the texture.
   uint32_t* pixels = (uint32_t*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));
