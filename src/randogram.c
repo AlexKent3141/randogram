@@ -5,6 +5,7 @@
 void get_randogram(
   struct prng_info prng_info,
   int* selected,
+  int* heatmap,
   int num_bits,
   uint32_t seed)
 {
@@ -18,5 +19,13 @@ void get_randogram(
     lower = next & word;
     upper = (next >> num_bits) & word;
     selected[lower*word + upper] = 1;
+
+    // Add to the heatmap.
+    for (int b1 = 0; b1 < num_bits; b1++) {
+      if ((lower & (1 << b1)) == 0) continue;
+      for (int b2 = 0; b2 < num_bits; b2++) {
+        heatmap[b1 * num_bits + b2] += (upper & (1 << b2)) > 0;
+      }
+    }
   }
 }

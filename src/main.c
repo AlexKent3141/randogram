@@ -76,9 +76,18 @@ int main(int argc, char** argv)
   }
 
   // Calculate the randogram that we want to plot.
-  int* data = (int*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
-  memset(data, 0, WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(int));
-  get_randogram(*func, data, NUM_BITS, seed);
+  int* data = (int*)calloc(WINDOW_WIDTH*WINDOW_HEIGHT, sizeof(int));
+  int* heatmap = (int*)calloc(8 * 8, sizeof(int));
+
+  get_randogram(*func, data, heatmap, NUM_BITS, seed);
+
+  // Print heatmap.
+  for (int r = 0; r < NUM_BITS; r++) {
+    for (int c = 0; c < NUM_BITS; c++) {
+      printf("%*d ", 5, heatmap[8 * r + c]);
+    }
+    puts("");
+  }
 
   // Set the pixels on the texture.
   uint32_t* pixels = (uint32_t*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));

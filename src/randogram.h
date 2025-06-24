@@ -8,6 +8,7 @@
 void get_randogram(
   struct prng_info prng_info,
   int* selected,
+  int* heatmap,
   int num_bits,
   uint32_t seed);
 
