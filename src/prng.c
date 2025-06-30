@@ -23,9 +23,9 @@ uint32_t xorshift32_func(uint32_t* s)
 
 uint32_t middle_square16_func(uint32_t* s)
 {
-  uint32_t x = pow(*s, 2);
-  *s = (x >> 8) & 0xffff;
-  return *s;
+  *s *= *s;
+  *s /= 1000;
+  return *s % 1000000;
 }
 
 struct prng_info qbasic = { &qbasic_func, 24 };
