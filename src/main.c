@@ -80,13 +80,25 @@ int main(int argc, char** argv)
 
   get_randogram(*func, data, heatmap, NUM_BITS, seed);
 
-  // Print heatmap.
+  // Print heatmap with row/column averages.
+  int col_sums[NUM_BITS] = {0};
   for (int r = 0; r < NUM_BITS; r++) {
+    int row_sum = 0;
     for (int c = 0; c < NUM_BITS; c++) {
-      printf("%*d ", 5, heatmap[8 * r + c]);
+      printf("%*d ", 5, heatmap[NUM_BITS * r + c]);
+      row_sum += heatmap[NUM_BITS * r + c];
+      col_sums[c] += heatmap[NUM_BITS * r + c];
     }
-    puts("");
+
+    printf("| %d\n", row_sum / NUM_BITS);
   }
+
+  puts("------------------------------------------------");
+  for (int c = 0; c < NUM_BITS; c++) {
+    printf("%*d ", 5, col_sums[c] / NUM_BITS);
+  }
+
+  puts("");
 
   // Set the pixels on the texture.
   uint32_t* pixels = (uint32_t*)malloc(WINDOW_WIDTH*WINDOW_HEIGHT*sizeof(float));
