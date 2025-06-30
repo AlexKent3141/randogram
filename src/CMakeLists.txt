@@ -13,3 +13,11 @@ target_link_libraries(
   randogram
     m
     ${SDL2_LIBRARIES})
+
+target_compile_options(
+  randogram
+  PUBLIC
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Werror)
