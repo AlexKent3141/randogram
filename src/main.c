@@ -27,8 +27,7 @@ int main(int argc, char** argv)
   else assert(0);
 
   // Pick the seed (can be overridden via the second argument).
-  const uint32_t prng_max = ~(uint32_t)0 >> (32 - func->state_size);
-  uint32_t seed = time(NULL) & prng_max;
+  uint32_t seed = time(NULL);
 
   if (argc > 2) {
     seed = atoi(argv[2]);
