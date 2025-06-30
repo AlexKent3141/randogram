@@ -15,6 +15,7 @@ uint32_t qbasic_high_func(uint32_t* s)
 
 uint32_t xorshift32_func(uint32_t* s)
 {
+  // Note: if `s == 0` this one breaks.
   *s ^= *s << 13;
   *s ^= *s >> 17;
   *s ^= *s << 5;
@@ -23,6 +24,7 @@ uint32_t xorshift32_func(uint32_t* s)
 
 uint32_t middle_square16_func(uint32_t* s)
 {
+  // Note: if `s * s < 1000` this one breaks.
   *s *= *s;
   *s /= 1000;
   return *s % 1000000;
