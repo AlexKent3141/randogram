@@ -23,4 +23,6 @@ extern struct prng_info xorshift32;
 
 extern struct prng_info middle_square16;
 
+extern struct prng_info c_rand;
+
 #endif // __PRNG_H__

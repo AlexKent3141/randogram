@@ -30,7 +30,15 @@ uint32_t middle_square16_func(uint32_t* s)
   return *s % 1000000;
 }
 
+uint32_t c_rand_func(uint32_t* s)
+{
+  _Static_assert(RAND_MAX >= (2 << 16), "RAND_MAX too small for this experiment");
+  (void)(s);
+  return rand();
+}
+
 struct prng_info qbasic = { &qbasic_func, 24 };
 struct prng_info qbasic_high = { &qbasic_high_func, 24 };
 struct prng_info xorshift32 = { &xorshift32_func, 32 };
 struct prng_info middle_square16 = { &middle_square16_func, 16 };
+struct prng_info c_rand = { &c_rand_func, 16 };

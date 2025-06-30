@@ -24,14 +24,18 @@ int main(int argc, char** argv)
   else if (strcmp(argv[1], "qbh") == 0) func = &qbasic_high;
   else if (strcmp(argv[1], "xs32") == 0) func = &xorshift32;
   else if (strcmp(argv[1], "msq16") == 0) func = &middle_square16;
+  else if (strcmp(argv[1], "rand") == 0) func = &c_rand;
   else assert(0);
 
   // Pick the seed (can be overridden via the second argument).
-  uint32_t seed = time(NULL);
+  srand(time(NULL));
+  uint32_t seed = (((uint32_t)rand()) << 16) + rand();
 
   if (argc > 2) {
     seed = atoi(argv[2]);
   }
+
+  printf("Seed is: %u\n", seed);
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
