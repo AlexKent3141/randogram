@@ -1,4 +1,5 @@
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 #include "prng.h"
 #include "randogram.h"
 #include "assert.h"
@@ -128,6 +129,26 @@ int main(int argc, char** argv)
       {
         case SDL_QUIT:
           stop = SDL_TRUE;
+          break;
+        case SDL_KEYDOWN:
+          if (event.key.keysym.sym == SDLK_q) {
+            stop = SDL_TRUE;
+          }
+          else if (event.key.keysym.sym == SDLK_s) {
+            // Create a temp surface for saving.
+            SDL_Surface* tmp = SDL_CreateRGBSurface(
+              0, WINDOW_WIDTH, WINDOW_HEIGHT, 32, 0xff0000, 0xff00, 0xff, 0xff000000);
+            SDL_RenderReadPixels(
+              renderer, NULL, tmp->format->format, tmp->pixels, tmp->pitch);
+
+            // Construct a good name.
+            char name[100];
+            sprintf(name, "%s-%u.png", argv[1], seed);
+
+            IMG_SavePNG(tmp, name);
+
+            SDL_FreeSurface(tmp);
+          }
           break;
         default:
           break;
